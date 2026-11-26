@@ -1,0 +1,95 @@
+
+{% extends 'manager/base.html' %}
+
+{% block title %}Marks Entry{% endblock %}
+
+{% block content %}
+
+<h2>✏️ Student Marks Entry</h2>
+
+<div class="card">
+    <h3>{{ test.name }}</h3>
+    <p>Class: {{ test.school_class.name }}</p>
+    <p>Subject: {{ test.subject.name }}</p>
+    <p>Total Marks: {{ test.total_marks }}</p>
+</div>
+
+<div class="card">
+    <h3>Enter Student Marks</h3>
+
+    <form method="POST">
+        {% csrf_token %}
+
+        <div style="overflow-x:auto;">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Student Name</th>
+                        <th>Marks</th>
+                        <th>Absent (AB)</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for row in rows %}
+                    <tr>
+                        <td>{{ row.student.name }}</td>
+
+                        <td>
+                            <input
+                                type="number"
+                                name="score_{{ row.student.id }}"
+                                min="0"
+                                max="{{ test.total_marks }}"
+                                step="0.5"
+                                value="{{ row.mark.score|default_if_none:'' }}"
+                                style="width:100px;">
+                        </td>
+
+                        <td>
+                            <input
+                                type="checkbox"
+                                name="absent_{{ row.student.id }}"
+                                {% if row.mark.is_absent %}checked{% endif %}
+                                style="width:auto;">
+                        </td>
+                    </tr>
+
+                    {% empty %}
+                    <tr>
+                        <td colspan="3">
+                            No students found. Add students first.
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <br>
+        <button type="submit">💾 Save All Marks</button>
+    </form>
+</div>
+
+<div class="card">
+    <h3>📊 Test Statistics</h3>
+
+    <div class="grid">
+        <div>
+            <p>Average Marks</p>
+            <h2>{{ stats.avg|default:"0"|floatformat:1 }}</h2>
+        </div>
+
+        <div>
+            <p>Highest Marks</p>
+            <h2>{{ stats.high|default:"0" }}</h2>
+        </div>
+
+        <div>
+            <p>Lowest Marks</p>
+            <h2>{{ stats.low|default:"0" }}</h2>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
