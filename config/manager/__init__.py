@@ -1,2 +1,0 @@
-
-# Manager application package
