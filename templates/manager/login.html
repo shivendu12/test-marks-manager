@@ -1,0 +1,73 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Admin Login | Test Marks Manager</title>
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg,#172554,#2563eb);
+            font-family: Arial,sans-serif;
+            padding: 15px;
+        }
+        .login-box {
+            background: white;
+            padding: 30px;
+            border-radius: 16px;
+            width: 100%;
+            max-width: 390px;
+            box-shadow: 0 10px 35px #0004;
+        }
+        h2 { text-align: center; color: #172554; }
+        input {
+            width: 100%;
+            padding: 13px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 7px;
+        }
+        button {
+            width: 100%;
+            padding: 13px;
+            background: #2563eb;
+            color: white;
+            border: 0;
+            border-radius: 7px;
+            font-size: 16px;
+        }
+        .error { color: red; }
+    </style>
+</head>
+<body>
+<div class="login-box">
+    <h2>📚 Test Marks Manager</h2>
+    <p style="text-align:center">Admin Login</p>
+
+    {% if messages %}
+        {% for message in messages %}
+            <p class="error">{{ message }}</p>
+        {% endfor %}
+    {% endif %}
+
+    <form method="POST">
+        {% csrf_token %}
+
+        <input type="text" name="username"
+               placeholder="Admin Username" required>
+
+        <input type="password" name="pin"
+               placeholder="Password / PIN" required>
+
+        <button type="submit">Login</button>
+    </form>
+</div>
+</body>
+  </html>
+  
