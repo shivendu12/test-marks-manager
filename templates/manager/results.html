@@ -1,0 +1,87 @@
+
+{% extends 'manager/base.html' %}
+{% block title %}Class Results{% endblock %}
+
+{% block content %}
+<h2>📊 Class Results</h2>
+
+<div class="card noprint">
+    <form method="get">
+        <label>Class</label>
+        <select name="class">
+            {% for c in classes %}
+            <option value="{{ c.id }}" {% if selected_class.id == c.id %}selected{% endif %}>
+                {{ c.name }}
+            </option>
+            {% endfor %}
+        </select>
+
+        <label>Subject</label>
+        <select name="subject">
+            <option value="">All Subjects</option>
+            {% for s in subjects %}
+            <option value="{{ s.id }}" {% if selected_subject == s.id|stringformat:"s" %}selected{% endif %}>
+                {{ s.name }}
+            </option>
+            {% endfor %}
+        </select>
+
+        <button type="submit">Show Result</button>
+        <button type="button" onclick="window.print()">Print Result</button>
+    </form>
+</div>
+
+<div class="card">
+    <div style="overflow-x:auto;">
+        <table>
+            <thead>
+                <tr>
+                    <th>Rank</th>
+                    <th>Student Name</th>
+                    {% for test in tests %}
+                    <th>{{ test.subject.name }} - {{ test.name }} / {{ test.total_marks }}</th>
+                    {% endfor %}
+                    <th>Total</th>
+                    <th>Percentage</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in results %}
+                <tr>
+                    <td>{{ row.rank }}</td>
+                    <td>{{ row.student.name }}</td>
+                    {% for mark in row.cells %}
+                    <td>
+                        {% if mark %}
+                            {% if mark.is_absent %}
+                                AB
+                            {% elif mark.score != None %}
+                                {{ mark.score }}
+                            {% else %}
+                                —
+                            {% endif %}
+                        {% else %}
+                            —
+                        {% endif %}
+                    </td>
+                    {% endfor %}
+                    <td>{{ row.earned }}/{{ row.possible }}</td>
+                    <td>
+                        {% if row.percent != None %}
+                            {{ row.percent|floatformat:1 }}%
+                        {% else %}
+                            —
+                        {% endif %}
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="10">No results found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
+              
