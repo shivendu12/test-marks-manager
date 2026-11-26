@@ -1,0 +1,63 @@
+
+{% extends 'manager/base.html' %}
+
+{% block title %}Tests Management{% endblock %}
+
+{% block content %}
+
+<h2>📝 Tests Management</h2>
+
+<div class="card">
+    <h3>➕ Create New Test</h3>
+
+    <form method="POST">
+        {% csrf_token %}
+
+        {{ form.as_p }}
+
+        <button type="submit">Create Test</button>
+    </form>
+</div>
+
+<div class="card">
+    <h3>📋 All Tests</h3>
+
+    <div style="overflow-x:auto;">
+        <table>
+            <thead>
+                <tr>
+                    <th>Test Name</th>
+                    <th>Class</th>
+                    <th>Subject</th>
+                    <th>Date</th>
+                    <th>Total Marks</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for test in tests %}
+                <tr>
+                    <td>{{ test.name }}</td>
+                    <td>{{ test.school_class.name }}</td>
+                    <td>{{ test.subject.name }}</td>
+                    <td>{{ test.test_date|default:"-" }}</td>
+                    <td>{{ test.total_marks }}</td>
+                    <td>
+                        <a href="{% url 'marks' test.id %}">
+                            Enter Marks
+                        </a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6">No tests created yet.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock %}
+  
