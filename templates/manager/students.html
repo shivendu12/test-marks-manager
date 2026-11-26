@@ -1,0 +1,74 @@
+
+{% extends 'manager/base.html' %}
+
+{% block title %}Students Management{% endblock %}
+
+{% block content %}
+
+<h2>👨‍🎓 Students Management</h2>
+
+<div class="card">
+    <h3>➕ Add Single Student</h3>
+
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Add Student</button>
+    </form>
+</div>
+
+<div class="card">
+    <h3>📋 Bulk Add Students</h3>
+    <p>एक लाइन में एक विद्यार्थी का नाम लिखें।</p>
+
+    <form method="POST">
+        {% csrf_token %}
+
+        <label>Select Class</label>
+        <select name="bulk_class" required>
+            {% for cls in classes %}
+            <option value="{{ cls.id }}">
+                {{ cls.name }}
+            </option>
+            {% endfor %}
+        </select>
+
+        <textarea
+            name="bulk_names"
+            rows="8"
+            style="width:100%;padding:12px;margin:10px 0;"
+            placeholder="Rahul Kumar&#10;Amit Sharma&#10;Priya Singh"
+            required></textarea>
+
+        <button type="submit">Add All Students</button>
+    </form>
+</div>
+
+<div class="card">
+    <h3>All Students</h3>
+
+    <div style="overflow-x:auto;">
+        <table>
+            <tr>
+                <th>Roll No.</th>
+                <th>Student Name</th>
+                <th>Class</th>
+            </tr>
+
+            {% for student in students %}
+            <tr>
+                <td>{{ student.roll_number|default:"-" }}</td>
+                <td>{{ student.name }}</td>
+                <td>{{ student.school_class.name }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="3">No students added yet.</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+</div>
+
+{% endblock %}
+          
