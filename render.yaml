@@ -1,0 +1,20 @@
+services:
+  - type: web
+    name: test-marks-manager
+    runtime: python
+    buildCommand: "./build.sh"
+    startCommand: "gunicorn config.wsgi:application"
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.7
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DEBUG
+        value: false
+      - key: DATABASE_URL
+        fromDatabase:
+          name: test-marks-db
+          property: connectionString
+databases:
+  - name: test-marks-db
+    plan: free
