@@ -1,0 +1,68 @@
+
+{% extends 'manager/base.html' %}
+
+{% block title %}Dashboard | Test Marks Manager{% endblock %}
+
+{% block content %}
+
+<h2>Welcome to Admin Dashboard 👋</h2>
+<p>Manage your school examination records.</p>
+
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:15px;">
+
+    <div class="card">
+        <h3>🏫 Classes</h3>
+        <h1>{{ class_count }}</h1>
+    </div>
+
+    <div class="card">
+        <h3>👨‍🎓 Students</h3>
+        <h1>{{ student_count }}</h1>
+    </div>
+
+    <div class="card">
+        <h3>📝 Tests</h3>
+        <h1>{{ test_count }}</h1>
+    </div>
+
+</div>
+
+<div class="card">
+    <h3>Quick Actions</h3>
+
+    <p><a href="{% url 'classes' %}">➕ Manage Classes</a></p>
+    <p><a href="{% url 'subjects' %}">➕ Manage Subjects</a></p>
+    <p><a href="{% url 'students' %}">➕ Add Students</a></p>
+    <p><a href="{% url 'tests' %}">➕ Create New Test</a></p>
+    <p><a href="{% url 'results' %}">📊 View Results</a></p>
+</div>
+
+<div class="card">
+    <h3>Recent Tests</h3>
+
+    <div style="overflow-x:auto;">
+        <table>
+            <tr>
+                <th>Test Name</th>
+                <th>Class</th>
+                <th>Subject</th>
+                <th>Total Marks</th>
+            </tr>
+
+            {% for test in tests %}
+            <tr>
+                <td>{{ test.name }}</td>
+                <td>{{ test.school_class.name }}</td>
+                <td>{{ test.subject.name }}</td>
+                <td>{{ test.total_marks }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="4">No tests created yet.</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+</div>
+
+{% endblock %}
